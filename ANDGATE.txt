@@ -1,0 +1,86 @@
+# Template for AND
+! SECOND_GATE_SIZE,8,8
+! SECOND_OUTPUT_LOC,6,6
+! SECOND_INPUT_LOC,1,0
+! FIRST_INPUT_LOC,3,2
+! END_SECOND
+# END Template
+# Run settings
+
+pixels_per_node    = 10
+speedup_factor     = 100
+max_duration       = 100
+debug              = False
+node_display       = Color
+fps                =60
+ #rng_seed           = 123123123
+
+!START_TRANSITION_RULES
+
+### WIRE RULES
+### 2 rules
+# Move
+(1) 0 + B -> B + 0
+(1) 1 + B -> B + 1
+
+### AND GATE
+### 14 rules
+# Load
+(1) 0 + BAx -> B + 0Ax
+(1) 1 + BAx -> B + 1Ax
+(1) 0 + BAy -> B + 0Ay
+(1) 1 + BAy -> B + 1Ay
+(1) 0Ax + BAz -> HAx + 0Az
+(1) 1Ax + BAz -> HAx + 1Az
+# Logic rules
+(1) 0Ay + 0Az -> HAy + 0Ak
+(1) 0Ay + 1Az -> HAy + 0Ak
+(1) 1Ay + 0Az -> HAy + 0Ak
+(1) 1Ay + 1Az -> HAy + 1Ak
+# Unload
+(1) 0Ak + B -> RRAz + 0
+(1) 1Ak + B -> RRAz + 1
+# Reset
+(1) RRAz + HAx -> RAz + BAx
+(1) RAz + HAy -> BAz + BAy
+
+### NOT gate rules
+### 6 rules
+# Load
+(1) 0 + BNx -> B + 0Nx
+(1) 1 + BNx -> B + 1Nx
+# Logic
+(1) 0Nx + BNy -> BNx + 1Ny
+(1) 1Nx + BNy -> BNx + 0Ny
+# Unload
+(1) 0Ny + B -> BNy + 0
+(1) 1Ny + B -> BNy + 1
+
+
+!END_TRANSITION_RULES
+
+
+!START_COLORMAP
+### SIGNALS
+{Inert State} I: (255, 255, 255)
+{Blank Wire} B: (191, 191, 191)
+{0 signal} 0, 0Nx, 0Ny, 0Ax, 0Ay, 0Ak, 0Az : (215,25,28)
+{1 signal} 1, 1Nx, 1Ny, 1Ay, 1Ax, 1Ak, 1Az: (229,223,70)
+
+### GATES
+{NOT Gate} BNx, BNy: (253,174,97)
+{AND Gate} BAx, BAy, BAz: (98,188,70)
+!END_COLORMAP
+
+!START_INIT_STATE
+
+I   I       B       B      B       I       I        I         
+0   BAy     BAz     I      B       I       I        I        
+I   I       BAx     I      B       I       I        I       
+I   I       1       I      B       I       I        I      
+I   I       I       I      B       I       I        I       
+I   I       I       I      B       I       I        I      
+I   I       I       I      B       B       B        I       
+I   I       I       I      I       I       I        I      
+
+!END_INIT_STATE

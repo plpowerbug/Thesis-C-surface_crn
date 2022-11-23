@@ -1,0 +1,72 @@
+#or gate
+# Template for OR
+! FIRST_GATE_SIZE,7,3
+! FIRST_OUTPUT_LOC,4,2
+! FIRST_INPUT_LOC,1,0
+! SECOND_INPUT_LOC,6,0
+! END_FIRST
+# END Template
+# Run settings
+
+pixels_per_node    = 10
+speedup_factor     = 100
+max_duration       = 100
+debug              = False
+node_display       = Color
+fps                =60
+ #rng_seed           = 123123123
+
+!START_TRANSITION_RULES
+
+# Move
+(1) 0 + B -> B + 0
+(1) 1 + B -> B + 1
+### OR GATE
+### 14 rules
+# Load
+(1) 0 + BRx -> B + 0Rx
+(1) 1 + BRx -> B + 1Rx
+(1) 0 + BRy -> B + 0Ry
+(1) 1 + BRy -> B + 1Ry
+(1) 0Rx + BRz -> HRx + 0Rz
+(1) 1Rx + BRz -> HRx + 1Rz
+# Logic rules
+(1) 0Ry + 0Rz -> HRy + 0Rk
+(1) 0Ry + 1Rz -> HRy + 1Rk
+(1) 1Ry + 0Rz -> HRy + 1Rk
+(1) 1Ry + 1Rz -> HRy + 1Rk
+# Unload
+(1) 0Rk + B -> RRRz + 0
+(1) 1Rk + B -> RRRz + 1
+# Reset
+(1) RRRz + HRx -> RRz + BRx
+(1) RRz + HRy -> BRz + BRy
+
+!END_TRANSITION_RULES
+
+
+!START_COLORMAP
+### SIGNALS
+{Inert State} I: (255, 255, 255)
+{Blank Wire} B: (191, 191, 191)
+{0 signal} 0, 0Rx, 0Ry, 0Rz, 0Rk: (215,25,28)
+{1 signal} 1, 1Rx, 1Ry, 1Rz, 1Rk: (229,223,70)
+
+### GATES
+{OR Gate} BRx, BRy, BRz: (43,131,186)
+### INTERMEDIATES
+{Reset Signal} RRRz,RRz: (255, 102, 0)
+{Holding Input} HRx, HRy: (200, 200, 100)
+
+!END_COLORMAP
+
+!START_INIT_STATE
+I        I         I 
+1        I         I
+B        I         I 
+BRx      I         I 
+BRz      B         B
+BRy      I         I 
+1        I         I 
+
+!END_INIT_STATE

@@ -1,0 +1,56 @@
+#not gate
+# Template for NOT
+! FIRST_GATE_SIZE,6,3
+! FIRST_OUTPUT_LOC,4,2
+! FIRST_INPUT_LOC,1,0
+! END_FIRST
+# END Template
+# Run settings
+
+pixels_per_node    = 10
+speedup_factor     = 100
+max_duration       = 100
+debug              = False
+node_display       = Color
+fps                =60
+ #rng_seed           = 123123123
+
+!START_TRANSITION_RULES
+
+### NOT gate rules
+### 6 rules
+# Load
+(1) 0 + BNx -> B + 0Nx
+(1) 1 + BNx -> B + 1Nx
+# Logic
+(1) 0Nx + BNy -> BNx + 1Ny
+(1) 1Nx + BNy -> BNx + 0Ny
+# Unload
+(1) 0Ny + B -> BNy + 0
+(1) 1Ny + B -> BNy + 1
+
+
+!END_TRANSITION_RULES
+
+
+!START_COLORMAP
+### SIGNALS
+{Inert State} I: (255, 255, 255)
+{Blank Wire} B: (191, 191, 191)
+{0 signal} 0, 0Nx, 0Ny: (215,25,28)
+{1 signal} 1, 1Nx, 1Ny: (229,223,70)
+
+### GATES
+{NOT Gate} BNx, BNy: (253,174,97)
+
+!END_COLORMAP
+
+!START_INIT_STATE
+I        I         I 
+1        I         I 
+B        I         I 
+B        I         I 
+BNx      BNy       B
+I        I         I 
+
+!END_INIT_STATE
